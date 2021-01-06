@@ -35,7 +35,15 @@ The `experiments` directory has scripts that measure the error of these four sto
 
 - `experiments\compare_estimators_on_mat.m`: Outputs the median, IQR, 25th quartile, and 75th quartile of the relative errors achieved by the four estimators on repeated trials. Only works for explicit matrices.
 - `experiments\compare_estimators_on_matvec_oracle.m`: Outputs the median, IQR, 25th, and 75th quartiles of the relative errors achieved by the four estimators on repeated trials. Only works for function handles.
-	- If the true trace of the underlying matrix is unknown, this script will output the median, IQR, 25th quartile, and 75th quartile of the actual outputs of the estimators (instead of the errors).
+	- If the true trace of the underlying matrix is not specified, this script will output the median, IQR, 25th quartile, and 75th quartile of the actual outputs of the estimators (instead of the errors).
+
+We have three scripts that estimate the trace-of-a-function-of-a-matrix, using either Lanczos iteration or direct matrix-vector products.
+All three of the below scripts just call `compare_estimators_on_matvec_oracle` with slightly different inputs.
+
+- `experiments\compare_estimators_estrada_index.m`: Uses Lanczos iteration to estimate the trace of the exponential of a matrix.
+- `experiments\compare_estimators_log_determinant.m`: Uses Lanczos iteration to estimate the trace of the logarithm of a matrix.
+- `experiments\compare_estimators_number_of_triangles.m`: Uses repeat matrix-vector products to estimate the trace of the cube of a matrix.
+- `experiments\lanczos.m`: Runs Lanczos iteration to approximate matrix-vector products involving the function of a matrix. This is a slightly modified version of the Lanczos script from [here](https://github.com/cpmusco/fast-pcr).
 
 We measure the relative error of estimated trace as the ratio |trace<sub>true</sub> - trace<sub>estimate</sub>| / trace<sub>true</sub>
 

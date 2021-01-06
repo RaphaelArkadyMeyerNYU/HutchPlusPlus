@@ -26,6 +26,10 @@ function compare_estimators_on_matvec_oracle(matVecOracle, num_queries, dimensio
 % If not specified, the output will be described in terms of the output value of the estimators,
 % making it harder to see if one estimator is more biased than another estimator.
 % 
+% - objective_name: The name of the property we are approximating. Usually this is the trace,
+% but can also be (for example) the log-determinant, or Estrada Index. Changing this string
+% changes the text that is printed, and nothing else.
+% 
 % - hutch_dist, sketch_dist, sketch_frac, c1, c2, sketch_iterations: optional parameters
 % that are passed down to hutchinson(), hutchplusplus(), na_hutchplusplus(), and
 % subspace_projection().
@@ -41,10 +45,10 @@ function compare_estimators_on_matvec_oracle(matVecOracle, num_queries, dimensio
 %     compare_estimators_on_matvec_oracle(A, 40, 101, 'true_trace', 3.14)
 % 
 % Compare the estimators on A with 36 matrix-vector products, using 75 trials
-%     compare_estimators_on_matvec_oracle(A_cubed, 40, 101, 75);
+%     compare_estimators_on_matvec_oracle(A, 40, 101, 75);
 % 
 % Compare the estimators on A with 36 matrix-vector products, using 75 trials, in terms of relative error
-%     compare_estimators_on_matvec_oracle(A_cubed, 40, 101, 75, 'true_trace', 3.14);
+%     compare_estimators_on_matvec_oracle(A, 40, 101, 75, 'true_trace', 3.14);
 %
 % Compare the estimators on A with 52 matrix-vector products, using 100 trials,
 % only using Gaussian vectors, with output in terms of relative error. Hutch++
@@ -60,6 +64,7 @@ function compare_estimators_on_matvec_oracle(matVecOracle, num_queries, dimensio
         dimension;
         num_trials = 50;
         args.true_trace = NaN;
+        args.objective_name = "trace";
         args.hutch_dist = @(m,n) 2*randi(2,m,n)-3; % Random sign matrix
         args.sketch_dist = @(m,n) 2*randi(2,m,n)-3; % Random sign matrix
         args.sketch_frac = 2/3;
@@ -89,10 +94,10 @@ function compare_estimators_on_matvec_oracle(matVecOracle, num_queries, dimensio
 		iqrs = iqr(trials);
 
 		fprintf("After " + num_trials + " trials using " + num_queries + " queries, we find that:\n")
-		fprintf("Hutchinson      estimates trace to be in [" + real2str(bottom_quartiles(1)) + "," + real2str(top_quartiles(1)) + "] 50%% of the time (iqr=" + real2str(iqrs(1)) + ", median=" + real2str(medians(1)) +")\n");
-		fprintf("Hutch++         estimates trace to be in [" + real2str(bottom_quartiles(2)) + "," + real2str(top_quartiles(2)) + "] 50%% of the time (iqr=" + real2str(iqrs(2)) + ", median=" + real2str(medians(2)) +")\n");
-		fprintf("NA-Hutch++      estimates trace to be in [" + real2str(bottom_quartiles(3)) + "," + real2str(top_quartiles(3)) + "] 50%% of the time (iqr=" + real2str(iqrs(3)) + ", median=" + real2str(medians(3)) +")\n");
-		fprintf("SubspaceProject estimates trace to be in [" + real2str(bottom_quartiles(4)) + "," + real2str(top_quartiles(4)) + "] 50%% of the time (iqr=" + real2str(iqrs(4)) + ", median=" + real2str(medians(4)) +")\n");
+		fprintf("Hutchinson      estimates " + args.objective_name + " to be in [" + real2str(bottom_quartiles(1)) + "," + real2str(top_quartiles(1)) + "] 50%% of the time (iqr=" + real2str(iqrs(1)) + ", median=" + real2str(medians(1)) +")\n");
+		fprintf("Hutch++         estimates " + args.objective_name + " to be in [" + real2str(bottom_quartiles(2)) + "," + real2str(top_quartiles(2)) + "] 50%% of the time (iqr=" + real2str(iqrs(2)) + ", median=" + real2str(medians(2)) +")\n");
+		fprintf("NA-Hutch++      estimates " + args.objective_name + " to be in [" + real2str(bottom_quartiles(3)) + "," + real2str(top_quartiles(3)) + "] 50%% of the time (iqr=" + real2str(iqrs(3)) + ", median=" + real2str(medians(3)) +")\n");
+		fprintf("SubspaceProject estimates " + args.objective_name + " to be in [" + real2str(bottom_quartiles(4)) + "," + real2str(top_quartiles(4)) + "] 50%% of the time (iqr=" + real2str(iqrs(4)) + ", median=" + real2str(medians(4)) +")\n");
 
 	else
 		% If the true trace is given, then report relative errors
