@@ -1,7 +1,7 @@
 function trace_est=hutchinson(matVecOracle, num_queries, dimension, args)
 % trace_est = hutchinson(matVecOracle, num_queries, dimension, args)
 % 
-% Compute the Hutchinson Estimator for the trace of a given square
+% Computes the Hutchinson Estimator for the trace of a given square
 % matrix using matrix-vector queries.
 % 
 % Required Inputs:
