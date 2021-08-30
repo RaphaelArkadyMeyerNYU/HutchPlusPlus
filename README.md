@@ -1,4 +1,4 @@
-This is the public code created for [Hutch++, a paper on trace estimation, found online here](https://arxiv.org/abs/2010.09649).
+This is the public code for [Hutch++, a paper on trace estimation, found online here](https://arxiv.org/abs/2010.09649).
 
 
 This repo contains MATLAB code to recreate the paper's experiments, as well as simplified code that makes it easier to use Hutch++ for your next application (or translate it to your language of choice).
